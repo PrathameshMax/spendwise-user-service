@@ -4,16 +4,44 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Polyrepo — the parent is a released artifact from GitHub Packages
+         (spendwise-shared), not a sibling folder. The empty relativePath stops
+         Maven from looking for ../pom.xml first. -->
     <parent>
         <groupId>com.spendwise</groupId>
         <artifactId>spendwise-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
+        <relativePath/>
     </parent>
 
     <artifactId>user-service</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>SpendWise :: User Service</name>
     <description>Owns identity, profile metadata, and systemic settings of the customer</description>
+
+    <scm>
+        <url>https://github.com/PrathameshMax/spendwise-user-service</url>
+        <connection>scm:git:https://github.com/PrathameshMax/spendwise-user-service.git</connection>
+    </scm>
+
+    <!-- Where spendwise-parent, spendwise-common and spendwise-events are
+         published. Declared here because Maven has to find the parent before it
+         can read the repositories the parent declares (Confluent's, for the
+         Avro serializer). The id "github" matches the <server> holding the token. -->
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>SpendWise shared libraries</name>
+            <url>https://maven.pkg.github.com/PrathameshMax/spendwise-shared</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
