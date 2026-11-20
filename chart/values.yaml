@@ -1,0 +1,82 @@
+image:
+  repository: ghcr.io/prathameshmax/spendwise-user-service
+  # Used only when digest is empty (a local `helm install` from source).
+  tag: main
+  # Written by the pipeline into every packaged chart; wins over tag.
+  digest: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+fullnameOverride: ""
+
+replicaCount: 2
+
+containerPorts:
+  - name: http
+    containerPort: 8082
+
+service:
+  create: true
+
+serviceAccount:
+  create: true
+  name: ""
+  # Mounted: the service logs in to Vault with Kubernetes auth, which
+  # presents this token (infra/k8s/security/30-vault-kubernetes-auth.sh).
+  automountToken: true
+
+# Wiring that is the same in every environment. Environment-specific settings
+# (database host, Kafka, Vault, Keycloak) come from the deploying environment's
+# values file or from envFrom (ConfigMap / Secret references), never from here.
+env:
+  - name: CONFIG_SERVER_URL
+    value: "http://config-server:8888"
+  - name: EUREKA_HOST
+    value: "discovery-server"
+
+envFrom: []
+
+podSecurity:
+  # The image's USER is a named account; Kubernetes can only enforce
+  # runAsNonRoot against a numeric id, so one is set here. app.jar is
+  # world-readable, so any non-root id can start it.
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+
+# The root filesystem is read-only; only these paths get a writable emptyDir.
+writablePaths:
+  - /tmp
+
+probes:
+  port: http
+  liveness: /actuator/health/liveness
+  readiness: /actuator/health/readiness
+  # 30 x 5s = up to 150s for the JVM, config-server fetch and Flyway.
+  startupFailureThreshold: 30
+
+terminationGracePeriodSeconds: 45
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 768Mi
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70
+
+podAnnotations: {}
+podLabels: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,13 @@
+apiVersion: v2
+name: user-service
+description: "SpendWise user-service — Customer profiles"
+type: application
+# Base version. The pipeline packages every main build as
+# <version>-g<short commit> with the image digest written into values.yaml.
+version: 1.0.0
+appVersion: "main"
+home: https://github.com/PrathameshMax/spendwise-user-service
+sources:
+  - https://github.com/PrathameshMax/spendwise-user-service
+maintainers:
+  - name: PrathameshMax
