@@ -6,7 +6,7 @@
 # the RUN that needs it, never written to a layer or the image history.
 #
 #   docker build --secret id=gh_token,env=GITHUB_PACKAGES_TOKEN -t spendwise-user-service .
-FROM maven:3.9.9-eclipse-temurin-21 AS build
+FROM maven:3.9-eclipse-temurin-26 AS build
 WORKDIR /workspace
 COPY ci-settings.xml pom.xml ./
 COPY src src
