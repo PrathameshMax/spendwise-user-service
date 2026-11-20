@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/root/.m2/repository \
     --mount=type=secret,id=gh_token,env=GITHUB_PACKAGES_TOKEN,required=true \
     mvn -B -ntp -s ci-settings.xml -DskipTests clean package
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75.0 -XX:+ExitOnOutOfMemoryError"
 RUN addgroup -S spendwise && adduser -S -G spendwise spendwise
