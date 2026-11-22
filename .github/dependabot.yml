@@ -1,5 +1,10 @@
 # Dependency updates arrive as pull requests and go through the full pipeline
 # (SCA and image scans included) like any other change.
+#
+# Major versions are ignored: Spring Boot 4 / Spring Cloud 2025.1 / Confluent 8 /
+# a new Java base image are a planned platform migration, not a weekly update.
+# Minor and patch updates (and their security fixes) keep flowing. Remove the
+# ignore blocks when that migration starts.
 version: 2
 registries:
   spendwise-shared:
@@ -16,6 +21,17 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      # Spring Cloud release trains are calendar-versioned: 2025.1 is the Spring Boot 4
+      # train, which semver reads as a minor bump. Comes with the Boot 4 migration.
+      - dependency-name: "org.springframework.cloud:spring-cloud-dependencies"
+        versions: [">=2025.1.0"]
+      # Avro must stay on the version Confluent's serializer is built against
+      # (spendwise-parent pom.xml); minor/major moves happen together with Confluent.
+      - dependency-name: "org.apache.avro:*"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
     groups:
       spring:
         patterns: ["org.springframework*"]
@@ -32,6 +48,9 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: build
 
