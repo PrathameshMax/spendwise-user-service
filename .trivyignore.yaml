@@ -2,18 +2,16 @@
 # Every entry needs a reason and an expiry; an expired entry fails the gate again.
 
 vulnerabilities:
-  # Spring Framework 6.2.x has no open-source fix; fixed only in 7.0.9 (Spring Boot 4).
-  # user-service serves JSON over @RestController only: no XsltView, no view resolvers.
+  # spring-webmvc 6.2.x: fixed only in Spring Framework 7.0.9 (Spring Boot 4).
   - id: CVE-2026-47884
     statement: >-
-      spring-webmvc XsltView path limitation. Not reachable: the service defines no
-      XsltView or ViewResolver. Removed by the Spring Boot 4 migration.
+      spring-webmvc XsltView path limitation. Not reachable: the service serves JSON over @RestController only; no XsltView or ViewResolver.
+      Removed by the Spring Boot 4 migration.
     expired_at: 2027-02-28
 
-  # Same constraint: fix only in Spring Framework 7.0.9.
-  # user-service uses no SseEmitter / ServerSentEvent / text/event-stream endpoints.
+  # spring-webmvc / spring-webflux 6.2.x: fixed only in Spring Framework 7.0.9 (Spring Boot 4).
   - id: CVE-2026-47890
     statement: >-
-      Server-Sent Events with view rendering. Not reachable: the service exposes no SSE
-      endpoints and renders no views. Removed by the Spring Boot 4 migration.
+      Server-Sent Events with view rendering. Not reachable: no SseEmitter or text/event-stream endpoints and no rendered views.
+      Removed by the Spring Boot 4 migration.
     expired_at: 2027-02-28
