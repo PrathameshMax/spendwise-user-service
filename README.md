@@ -24,3 +24,4 @@ docker build --secret id=gh_token,env=GITHUB_PACKAGES_TOKEN -t spendwise-user-se
 `.github/workflows/ci.yml`: every pull request builds, tests and builds the image; every push to
 `main` also pushes the image to GHCR, tagged with the commit SHA and `main`. The repository secret
 `PACKAGES_READ_TOKEN` (classic token, `read:packages`) lets CI read the shared packages.
+Testing git 
