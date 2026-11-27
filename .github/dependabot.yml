@@ -20,7 +20,6 @@ updates:
     schedule:
       interval: weekly
       day: monday
-    open-pull-requests-limit: 10
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
